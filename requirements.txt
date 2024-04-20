@@ -6,3 +6,4 @@ pitch
 matplotlib
 scipy
 pydub
+pygame
