@@ -7,3 +7,5 @@ matplotlib
 scipy
 pydub
 pygame
+soundfile
+IPython
