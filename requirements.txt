@@ -1,0 +1,8 @@
+numpy
+pyaudio
+aubio
+librosa
+pitch
+matplotlib
+scipy
+pydub
