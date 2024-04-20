@@ -1,2 +1,4 @@
 # Bitcamp-2024
-Write your text here
+## Steps to run the program
+1. Install all dependencies using `python -r requirements.txt`
+2. Run `python main.py` to play the game
