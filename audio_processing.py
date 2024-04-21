@@ -10,8 +10,9 @@ from pydub import AudioSegment
 from pydub.playback import play
 import pyaudio
 
+
 def extract_vocals(filename):
-    y, sr = librosa.load(filename, duration=120)
+    y, sr = librosa.load(filename)
     S_full, phase = librosa.magphase(librosa.stft(y))
     S_filter = librosa.decompose.nn_filter(S_full,
                                        aggregate=np.median,
@@ -38,7 +39,6 @@ def extract_vocals(filename):
 
 def get_freqs(filename):
     y, sr = librosa.load(filename)
-    y = y[sr*30: sr*45]
     hop_length = 128
     pitch_o = aubio.pitch("mcomb", hop_length, hop_length, sr)
     pitch_o.set_unit("Hz")
@@ -52,3 +52,6 @@ def get_freqs(filename):
         pitches.append(pitch)
     return pitches
 
+def get_framerate(filename):
+    y, sr = librosa.load(filename)
+    return sr
