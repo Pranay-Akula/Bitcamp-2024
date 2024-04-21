@@ -11,10 +11,8 @@ import time
 
 filename = input("Enter the file path to a song of your choice (.wav): ")
 framerate = get_framerate(filename)
-'''
 extract_vocals(filename)
-'''
-song_freqs = np.array(get_freqs("output.wav"))
+song_freqs = np.array(get_freqs('output.wav'))
 
 # soundDetector
 low_calced = True
@@ -46,8 +44,23 @@ while high_calced:
         print("Please respond with 'yes' or 'no'.")
         continue
 
-song_freqs[song_freqs > high_frequency] = 0
-song_freqs[song_freqs < low_frequency] = 0
+
+def transform_outliers(arr):
+    mean = np.mean(arr)
+    std_dev = np.std(arr)
+    threshold = 2 * std_dev
+    for i in range(len(arr)):
+        if abs(arr[i] - mean) > threshold:
+            arr[i] = 0
+    return arr
+
+song_freqs = transform_outliers(song_freqs)
+
+zero_indexes = [i for i, x in enumerate(song_freqs) if x == 0]
+print(len(zero_indexes)/len(song_freqs)) 
+print(high_frequency)
+# print(np.mean(song_freqs))
+# exit()
 
 # Pygame code
 
@@ -106,10 +119,10 @@ class Coin:
 
     def update (self, new_ypos):
         self.ypos = new_ypos
-        self.xpos = self.xpos - (200 * dt)
+        self.xpos = self.xpos - (800 * dt)
 
-def map_freq_to_pos (freq):
-    ratio = (freq - low_frequency)/(high_frequency - low_frequency)
+def map_freq_to_pos (freq, min_freq, max_freq):
+    ratio = (freq - min_freq)/(max_freq - min_freq)
     mapped = ratio * screen_length
     return screen_length - mapped
 
@@ -136,7 +149,7 @@ def main():
     space_image = pygame.image.load('media/space-background.jpeg')
     space_image = pygame.transform.scale(space_image, (900,screen_length+100))
 
-    spawn_interval = 3000
+    spawn_interval = 200
     last_spawn_time = pygame.time.get_ticks()
 
     song_start_time = time.time()
@@ -159,7 +172,7 @@ def main():
 
         if not q.empty():
             b = q.get()
-            new_ypos = map_freq_to_pos(b)
+            new_ypos = map_freq_to_pos(b, low_frequency, high_frequency)
             player.update(new_ypos)
             
 
@@ -167,9 +180,20 @@ def main():
         player.displayScore(score)
         # coin.display()
 
+
+
+
+
         current_time = pygame.time.get_ticks()
         if current_time - last_spawn_time >= spawn_interval:
-            coin = Coin(800,250)
+            curr_secs = time.time() - song_start_time
+            coin_freq = song_freqs[int((curr_secs * 128))]
+            # print("index: ", int((curr_secs * 128)))
+
+            scaled_coin_pos = map_freq_to_pos(coin_freq, np.min(song_freqs), np.max(song_freqs))
+            print(coin_freq)
+            if (scaled_coin_pos >= 20):
+                coin = Coin(800,scaled_coin_pos)
             coins_group.append(coin)
             last_spawn_time = current_time
 
@@ -184,7 +208,7 @@ def main():
                 score += 1
         
         curr_time = time.time() - song_start_time
-        print(curr_time)
+        # print(curr_time)
         pygame.display.update()
 
     

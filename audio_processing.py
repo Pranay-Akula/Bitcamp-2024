@@ -10,7 +10,30 @@ from pydub import AudioSegment
 from pydub.playback import play
 import pyaudio
 
+def extract_vocals(filename, margin_i=1, margin_v=10, power=1):
+    y, sr = librosa.load(filename)
+    S_full, phase = librosa.magphase(librosa.stft(y))
+    S_filter = librosa.decompose.nn_filter(S_full,
+                                           aggregate=np.median,
+                                           metric='cosine',
+                                           width=int(librosa.time_to_frames(2, sr=sr)))
 
+    S_filter = np.minimum(S_full, S_filter)
+
+    mask_i = librosa.util.softmask(S_filter,
+                                    margin_i * (S_full - S_filter),
+                                    power=power)
+
+    mask_v = librosa.util.softmask(S_full - S_filter,
+                                    margin_v * S_filter,
+                                    power=power)
+
+    S_foreground = mask_v * S_full
+    S_background = mask_i * S_full
+    new_y = librosa.istft(S_foreground * phase)
+    sf.write("output.wav", new_y, samplerate=sr, subtype='PCM_24')
+
+"""
 def extract_vocals(filename):
     y, sr = librosa.load(filename)
     S_full, phase = librosa.magphase(librosa.stft(y))
@@ -35,6 +58,7 @@ def extract_vocals(filename):
     S_background = mask_i * S_full
     new_y = librosa.istft(S_foreground*phase)
     sf.write("output.wav", new_y, samplerate=sr, subtype='PCM_24')
+"""
  
 
 def get_freqs(filename):
