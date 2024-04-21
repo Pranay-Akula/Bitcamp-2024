@@ -7,7 +7,7 @@ import argparse
 
 import queue
 
-import music21  # yes! new favorite library
+import music21
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-input", required=False, type=int, help="Audio Input Device")
@@ -24,7 +24,7 @@ if not args.input:
 # PyAudio object.
 p = pyaudio.PyAudio()
 
-# Open stream.
+# Open stream
 stream = p.open(format=pyaudio.paFloat32,
 								channels=1, rate=44100, input=True,
 								input_device_index=args.input, frames_per_buffer=4096)
@@ -67,16 +67,17 @@ def get_current_freq(volume_thresh=0.7, printOut=False):
 					current = current_pitch.nameWithOctave
 					q.put({'Note': current, 'Cents': current_pitch.microtone.cents})
 
-def get_low_freq(volume_thresh=0.7):
+
+
+def get_mean_freq(volume_thresh=0.08):
 
 	current_pitch = music21.pitch.Pitch()
 
 	# Start Timer
 	start_time = time.time() 
 
+	freqs = []
 	while time.time() - start_time < 3:
-
-			low_freqs = []
 
 			data = stream.read(1024, exception_on_overflow=False)
 			samples = np.fromstring(data,
@@ -87,51 +88,30 @@ def get_low_freq(volume_thresh=0.7):
 
 			if pitch and volume > volume_thresh:  # adjust with your mic!
 					current_pitch.frequency = pitch
-					low_freqs.append(pitch)
+					freqs.append(pitch)
+					print(pitch)
 			else:
 					continue
 	
-	return np.mean(low_freqs)
+	# return [np.min(freqs), np.max(freqs)]
+	return np.mean(freqs)
 
-def get_high_freq(volume_thresh=0.7):
-
-	current_pitch = music21.pitch.Pitch()
-
-	# Start Timer
-	start_time = time.time() 
-
-	while time.time() - start_time < 3:
-
-			high_freqs = []
-
-			data = stream.read(1024, exception_on_overflow=False)
-			samples = np.fromstring(data,
-															dtype=aubio.float_type)
-			pitch = pDetection(samples)[0]
-
-			volume = np.sum(samples**2)/len(samples) * 100
-
-			if pitch and volume > volume_thresh:  # adjust with your mic!
-					current_pitch.frequency = pitch
-					high_freqs.append(pitch)
-			else:
-					continue
-
-	return np.mean(high_freqs)
 		
 
 if __name__ == '__main__':
 
 	low_calced = True
 	high_calced = True
- 
+
+	song_read = True
+
 	while low_calced:
 		
 		user_input = input("Are you ready to record your lowest pitch? (yes/no): ").strip().lower()
 
         # Check user's response
 		if user_input == "yes":
-			low_frequency = get_low_freq()
+			low_frequency = get_mean_freq()
 			low_calced = False
 			
 		elif user_input == "no":
@@ -146,7 +126,7 @@ if __name__ == '__main__':
 
         # Check user's response
 		if user_input == "yes":
-			high_frequency = get_high_freq()
+			high_frequency = get_mean_freq()
 			high_calced = False
 			
 		elif user_input == "no":
@@ -155,7 +135,9 @@ if __name__ == '__main__':
 			print("Please respond with 'yes' or 'no'.")
 			continue
 
-
-	print("Vocal Range Calculated")
 	print("Low: ", low_frequency)
 	print("High: ", high_frequency)
+
+"""
+END
+"""
