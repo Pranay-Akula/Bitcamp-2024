@@ -11,6 +11,7 @@ import music21
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-input", required=False, type=int, help="Audio Input Device")
+parser.add_argument("-volume", required=False, type=float, help="Volume Threshold")
 args = parser.parse_args()
 
 if not args.input:
@@ -19,6 +20,11 @@ if not args.input:
 		for i in range(p.get_device_count()):
 				print("Device number (%i): %s" % (i, p.get_device_info_by_index(i).get('name')))
 		print("Run this program with -input 1, or the number of the input you'd like to use.")
+		exit()
+
+if not args.volume:
+		print("No volume threshold specified. Select a float between 0-1 for specific device: ")
+		print("Run this program with -volume 0.08, or the float of the threshold you'd like to use.")
 		exit()
 
 # PyAudio object.
@@ -39,7 +45,7 @@ pDetection.set_silence(-40)
 q = queue.Queue()
 
 
-def get_current_freq(volume_thresh=0.7, printOut=False):
+def get_current_freq(volume_thresh=args.volume, printOut=False):
 
 	current_pitch = music21.pitch.Pitch()
 
@@ -69,7 +75,7 @@ def get_current_freq(volume_thresh=0.7, printOut=False):
 
 
 
-def get_mean_freq(volume_thresh=0.08):
+def get_mean_freq(volume_thresh=args.volume):
 
 	current_pitch = music21.pitch.Pitch()
 
@@ -89,7 +95,7 @@ def get_mean_freq(volume_thresh=0.08):
 			if pitch and volume > volume_thresh:  # adjust with your mic!
 					current_pitch.frequency = pitch
 					freqs.append(pitch)
-					print(pitch)
+
 			else:
 					continue
 	
