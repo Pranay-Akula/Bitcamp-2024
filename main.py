@@ -34,6 +34,9 @@ while high_calced:
     else:
         print("Please respond with 'yes' or 'no'.")
         continue
+song_freqs[song_freqs > high_frequency or song_freqs < low_frequency] = 0
+
+
 
 
 
