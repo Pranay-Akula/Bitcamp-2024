@@ -53,6 +53,7 @@ screen = pygame.display.set_mode((800,500))
 pygame.display.set_caption("Perfect Pitch")
 
 clock = pygame.time.Clock()
+dt = clock.tick(60) / 1000.0
 FPS = 30
 
 class Player:
@@ -92,7 +93,7 @@ class Coin:
 
     def update (self, new_ypos):
         self.ypos = new_ypos
-        self.xpos = self.xpos - 2
+        self.xpos = self.xpos - (200 * dt)
 
 
 
