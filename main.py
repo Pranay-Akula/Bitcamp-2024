@@ -5,14 +5,12 @@ import numpy as np
 import pygame
 import numpy as np
 from sys import exit
-
-"""
+'''
 filename = input("Enter the file path to a song of your choice (.wav): ")
 framerate = get_framerate(filename)
 extract_vocals(filename)
 song_freqs = np.array(get_freqs("output.wav"))
-"""
-
+'''
 # soundDetector
 low_calced = True
 high_calced = True
@@ -42,12 +40,10 @@ while high_calced:
     else:
         print("Please respond with 'yes' or 'no'.")
         continue
-
-"""
+'''
 song_freqs[song_freqs > high_frequency] = 0
 song_freqs[song_freqs < low_frequency] = 0
-"""
-
+'''
 # Pygame code
 
 pygame.init()
@@ -125,6 +121,9 @@ def main():
 
         dt = clock.tick(60) / 1000.0
 
+
+        dt = clock.tick(60) / 1000.0
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -163,3 +162,8 @@ def main():
     
 main()
 pygame.quit()
+
+
+
+
+
