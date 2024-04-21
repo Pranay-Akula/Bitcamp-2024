@@ -52,6 +52,6 @@ def get_freqs(filename):
         pitches.append(pitch)
     return pitches
 
-def get_framerate(filename):
+def get_info(filename):
     y, sr = librosa.load(filename)
-    return sr
+    return (y, sr)
