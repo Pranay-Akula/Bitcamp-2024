@@ -10,6 +10,7 @@ screen = pygame.display.set_mode((800,500))
 pygame.display.set_caption("Perfect Pitch")
 
 clock = pygame.time.Clock()
+dt = clock.tick(60) / 1000.0
 FPS = 30
 
 class Player:
@@ -49,7 +50,7 @@ class Coin:
 
     def update (self, new_ypos):
         self.ypos = new_ypos
-        self.xpos = self.xpos - 2
+        self.xpos = self.xpos - (200 * dt)
 
 
 
@@ -73,6 +74,9 @@ def main():
     last_spawn_time = pygame.time.get_ticks()
 
     while running:
+
+        dt = clock.tick(60) / 1000.0
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -107,8 +111,6 @@ def main():
                 score += 1
         
         pygame.display.update()
-
-        clock.tick(60)
 
     
 main()
