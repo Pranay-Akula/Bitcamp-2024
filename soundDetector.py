@@ -70,8 +70,7 @@ def get_current_freq(volume_thresh=args.volume, printOut=False):
 
 			else:
 					# Puts Notes and Cents in Queue -- WILL CHANGE
-					current = current_pitch.nameWithOctave
-					q.put({'Note': current, 'Cents': current_pitch.microtone.cents})
+					q.put(current_pitch.frequency)
 
 
 
