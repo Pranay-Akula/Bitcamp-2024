@@ -10,9 +10,9 @@ import time
 
 
 filename = input("Enter the file path to a song of your choice (.wav): ")
-framerate = get_framerate(filename)
+framerate = get_info(filename)
 extract_vocals(filename)
-song_freqs = np.array(get_freqs('output.wav'))
+song_freqs = np.array(get_freqs("output.wav"))
 
 # soundDetector
 low_calced = True
