@@ -9,3 +9,4 @@ pydub
 pygame
 soundfile
 IPython
+music21
