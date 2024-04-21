@@ -3,14 +3,13 @@ from soundDetector import get_mean_freq
 import numpy as np
 # Pygame imports
 import pygame
-import numpy as np
 from sys import exit
-
+"""
 filename = input("Enter the file path to a song of your choice (.wav): ")
 framerate = get_framerate(filename)
 extract_vocals(filename)
 song_freqs = np.array(get_freqs("output.wav"))
-
+"""
 # soundDetector
 low_calced = True
 high_calced = True
@@ -40,8 +39,11 @@ while high_calced:
     else:
         print("Please respond with 'yes' or 'no'.")
         continue
+    
+"""
 song_freqs[song_freqs > high_frequency] = 0
 song_freqs[song_freqs < low_frequency] = 0
+"""
 
 # Pygame code
 
