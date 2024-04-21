@@ -7,8 +7,9 @@ matplotlib
 scipy
 pydub
 pygame
-<<<<<<< HEAD
-=======
 soundfile
 IPython
->>>>>>> d0b25dc9afb374fc7ca5de220f1542647be7ac87
+time
+argparse
+queue
+music21
