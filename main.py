@@ -122,6 +122,9 @@ def main():
     last_spawn_time = pygame.time.get_ticks()
 
     while running:
+
+        dt = clock.tick(60) / 1000.0
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -160,8 +163,3 @@ def main():
     
 main()
 pygame.quit()
-
-
-
-
-
