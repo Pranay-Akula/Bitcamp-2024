@@ -1,6 +1,8 @@
 from audio_processing import *
 from soundDetector import get_mean_freq
 import numpy as np
+import matplotlib.pyplot as plt
+
 filename = input("Enter the file path to a song of your choice (.wav): ")
 extract_vocals(filename)
 song_freqs = np.array(get_freqs("output.wav"))
@@ -34,8 +36,8 @@ while high_calced:
     else:
         print("Please respond with 'yes' or 'no'.")
         continue
-song_freqs[song_freqs > high_frequency or song_freqs < low_frequency] = 0
-
+song_freqs[song_freqs > high_frequency] = 0
+song_freqs[song_freqs < low_frequency] = 0
 
 
 
