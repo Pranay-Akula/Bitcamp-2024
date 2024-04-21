@@ -99,7 +99,10 @@ def get_mean_freq(volume_thresh=args.volume):
 					continue
 	
 	# return [np.min(freqs), np.max(freqs)]
-	return np.mean(freqs)
+	if freqs:
+		return np.mean(freqs)
+	else:
+		return -1
 
 		
 
