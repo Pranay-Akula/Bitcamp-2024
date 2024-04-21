@@ -1,9 +1,9 @@
 from audio_processing import *
 from soundDetector import get_mean_freq
 import numpy as np
-import matplotlib.pyplot as plt
 
 filename = input("Enter the file path to a song of your choice (.wav): ")
+framerate = get_framerate(filename)
 extract_vocals(filename)
 song_freqs = np.array(get_freqs("output.wav"))
 
