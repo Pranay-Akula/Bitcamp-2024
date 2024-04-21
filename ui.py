@@ -49,7 +49,7 @@ class Coin:
 
     def update (self, new_ypos):
         self.ypos = new_ypos
-        self.xpos = self.xpos - 1
+        self.xpos = self.xpos - 2
 
 
 
@@ -63,11 +63,14 @@ def main():
 
     player = Player(100,250)
     coins_group = []
-    coin = Coin(700, 250)
+    coin = Coin(800, 100)
     coins_group.append(coin)
 
     space_image = pygame.image.load('media/space-background.jpeg')
     space_image = pygame.transform.scale(space_image, (900,600))
+
+    spawn_interval = 3000
+    last_spawn_time = pygame.time.get_ticks()
 
     while running:
         for event in pygame.event.get():
@@ -87,11 +90,18 @@ def main():
         player.displayScore(score)
         # coin.display()
 
+        current_time = pygame.time.get_ticks()
+        if current_time - last_spawn_time >= spawn_interval:
+            coin = Coin(800,250)
+            coins_group.append(coin)
+            last_spawn_time = current_time
+
+
         for coin in coins_group:
             coin.update(coin.ypos)
             coin.display()
             if (coin.xpos < 0):
-                coin.xpos = 800
+                coins_group.remove(coin)
             if pygame.Rect.colliderect(player.player_rect, coin.coin_rect):
                 coins_group.remove(coin)
                 score += 1
