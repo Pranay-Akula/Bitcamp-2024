@@ -50,7 +50,7 @@ pygame.init()
 
 pong_font = pygame.font.Font('media/bit5x3.ttf', 20)
 
-screen = pygame.display.set_mode((800,500))
+screen = pygame.display.set_mode((800,max((high_frequency-low_frequency), 300)))
 pygame.display.set_caption("Perfect Pitch")
 
 clock = pygame.time.Clock()
@@ -112,7 +112,7 @@ def main():
     coins_group.append(coin)
 
     space_image = pygame.image.load('media/space-background.jpeg')
-    space_image = pygame.transform.scale(space_image, (900,600))
+    space_image = pygame.transform.scale(space_image, (900,max((high_frequency-low_frequency)+100, 300)))
 
     spawn_interval = 3000
     last_spawn_time = pygame.time.get_ticks()
